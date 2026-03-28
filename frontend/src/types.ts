@@ -26,6 +26,7 @@ export interface OptionSchema {
 
 export interface ConversionJob {
   id: string;
+  remoteFileId?: string;
   operationId: string;
   sourceFileName: string;
   outputFormat: string;

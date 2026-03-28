@@ -2,12 +2,14 @@ import {
   FormControlLabel,
   MenuItem,
   Paper,
+  SelectChangeEvent,
   Select,
   Slider,
   Stack,
   Switch,
   Typography,
 } from "@mui/material";
+import { ChangeEvent } from "react";
 import { ConversionOperation, OptionSchema } from "../types";
 
 interface ConversionOptionsProps {
@@ -31,7 +33,7 @@ function OptionField({
         control={
           <Switch
             checked={Boolean(value)}
-            onChange={(event) => onChange(event.target.checked)}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.checked)}
             inputProps={{ "aria-label": option.ariaLabel }}
           />
         }
@@ -47,7 +49,7 @@ function OptionField({
         <Select
           size="small"
           value={String(value)}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event: SelectChangeEvent<string>) => onChange(event.target.value)}
           inputProps={{ "aria-label": option.ariaLabel }}
         >
           {option.choices?.map((choice) => (
@@ -69,7 +71,7 @@ function OptionField({
         min={option.min}
         max={option.max}
         step={1}
-        onChange={(_, nextValue) => onChange(nextValue as number)}
+        onChange={(_: Event, nextValue: number | number[]) => onChange(nextValue as number)}
         aria-label={option.ariaLabel}
       />
     </Stack>
