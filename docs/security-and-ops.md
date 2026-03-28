@@ -9,7 +9,11 @@
   - Maximum file size in bytes.
   - Maximum page count for document workflows.
   - Maximum media duration for A/V workflows.
-- The backend currently accepts optional metadata headers (`x-pages`, `x-duration-seconds`) as extraction placeholders. In production, these should be replaced with trusted parsers (e.g., `pdfinfo`, `ffprobe`).
+- Metadata checks are extracted server-side:
+  - PDF page counts are inferred from PDF page object markers.
+  - DOCX page counts are read from `docProps/app.xml` when available.
+  - WAV duration is read from frame metadata.
+  - Audio/video duration falls back to `ffprobe` when available.
 
 ## Malware Scanning
 

@@ -86,11 +86,12 @@ export default function App() {
     return () => clearInterval(poll);
   }, []);
 
-  const enqueueJob = (file: File) => {
+  const enqueueJob = (file: File, remoteFileId: string) => {
     if (!selectedOperation) return;
     setIsQueueLoading(true);
     const newJob: ConversionJob = {
       id: crypto.randomUUID(),
+      remoteFileId,
       operationId: selectedOperation.id,
       sourceFileName: file.name,
       outputFormat: selectedOutput || selectedOperation.outputs[0],

@@ -30,6 +30,7 @@ from .observability import (
     metrics_payload,
     report_exception,
 )
+from .metadata import extract_file_metadata
 from .security import ClamAVScanner, SignedURLService, ValidationError, validate_extension_and_mime
 from .services import JobStore, RateLimiter, cleanup_loop
 
@@ -98,9 +99,9 @@ async def create_job(
         if input_path.stat().st_size > limits.max_file_bytes:
             raise ValidationError("file size exceeds limit")
 
-        # Placeholder extraction hooks for media metadata/page counts.
-        estimated_pages = int(request.headers.get("x-pages", "0")) or None
-        estimated_duration = int(request.headers.get("x-duration-seconds", "0")) or None
+        metadata = extract_file_metadata(input_path, conversion_type)
+        estimated_pages = metadata.pages
+        estimated_duration = metadata.duration_seconds
 
         if limits.max_pages is not None and estimated_pages and estimated_pages > limits.max_pages:
             raise ValidationError("page count exceeds limit")

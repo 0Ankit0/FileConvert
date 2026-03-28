@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import boto3
 
@@ -23,3 +24,8 @@ class S3StorageProvider(StorageProvider):
     def read(self, object_key: str) -> bytes:
         response = self.client.get_object(Bucket=self.bucket, Key=object_key)
         return response["Body"].read()
+
+    def save_file(self, object_key: str, source_path: Path) -> str:
+        with source_path.open("rb") as source:
+            self.client.upload_fileobj(source, self.bucket, object_key)
+        return f"s3://{self.bucket}/{object_key}"

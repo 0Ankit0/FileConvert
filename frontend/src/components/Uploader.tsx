@@ -1,20 +1,23 @@
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
-import { Alert, Box, Paper, Stack, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { Alert, Box, LinearProgress, Paper, Stack, Typography } from "@mui/material";
+import { DragEvent, KeyboardEvent, useRef, useState } from "react";
+import { uploadFileInChunks } from "../api/chunkUpload";
 import { ConversionOperation } from "../types";
 
 interface UploaderProps {
   operation?: ConversionOperation;
-  onFileAccepted: (file: File) => void;
+  onFileAccepted: (file: File, remoteFileId: string) => void;
 }
 
 export function Uploader({ operation, onFileAccepted }: UploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = (file: File) => {
+  const validateFile = async (file: File) => {
     if (!operation) {
       setError("Select a conversion tool first.");
       return;
@@ -24,8 +27,19 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
       setError(`Unsupported file type .${extension}. Expected: ${operation.accepts.join(", ")}`);
       return;
     }
-    setError("");
-    onFileAccepted(file);
+    try {
+      setError("");
+      setIsUploading(true);
+      setUploadProgress(0);
+      const upload = await uploadFileInChunks(file, (uploaded, total) => {
+        setUploadProgress(Math.round((uploaded / total) * 100));
+      });
+      onFileAccepted(file, upload.file_id);
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : "Upload failed.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -34,30 +48,33 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
         role="button"
         tabIndex={0}
         aria-label="Upload source file by clicking or dragging"
-        onClick={() => fileInputRef.current?.click()}
-        onKeyDown={(event) => {
+        onClick={() => {
+          if (!isUploading) fileInputRef.current?.click();
+        }}
+        onKeyDown={(event: KeyboardEvent) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            fileInputRef.current?.click();
+            if (!isUploading) fileInputRef.current?.click();
           }
         }}
-        onDragOver={(event) => {
+        onDragOver={(event: DragEvent) => {
           event.preventDefault();
           setIsDragging(true);
         }}
         onDragLeave={() => setIsDragging(false)}
-        onDrop={(event) => {
+        onDrop={(event: DragEvent) => {
           event.preventDefault();
           setIsDragging(false);
           const droppedFile = event.dataTransfer.files.item(0);
-          if (droppedFile) validateFile(droppedFile);
+          if (droppedFile && !isUploading) validateFile(droppedFile);
         }}
         sx={{
           p: 4,
           border: "2px dashed",
           borderColor: isDragging ? "primary.main" : "divider",
           backgroundColor: isDragging ? "action.hover" : "background.paper",
-          cursor: "pointer",
+          cursor: isUploading ? "progress" : "pointer",
+          opacity: isUploading ? 0.8 : 1,
         }}
       >
         <Stack spacing={1} alignItems="center">
@@ -75,6 +92,7 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
         ref={fileInputRef}
         hidden
         type="file"
+        disabled={isUploading}
         onChange={(event) => {
           const file = event.target.files?.item(0);
           if (file) validateFile(file);
@@ -85,6 +103,15 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
         <Alert sx={{ mt: 2 }} severity="error" aria-live="polite">
           {error}
         </Alert>
+      ) : null}
+
+      {isUploading ? (
+        <Box mt={2} aria-live="polite">
+          <Typography variant="body2" color="text.secondary" mb={0.5}>
+            Uploading in chunks… {uploadProgress}%
+          </Typography>
+          <LinearProgress variant="determinate" value={uploadProgress} />
+        </Box>
       ) : null}
 
       {!error && operation ? (
