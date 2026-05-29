@@ -2,11 +2,11 @@ import { ConversionOperation } from "../types";
 
 export const operations: ConversionOperation[] = [
   {
-    id: "pdf-to-docx",
-    name: "PDF to DOCX",
+    id: "pdf-to-word",
+    name: "PDF to Word",
     category: "PDF",
     accepts: ["pdf"],
-    outputs: ["docx", "txt"],
+    outputs: ["docx"],
     options: [
       {
         key: "ocr",
@@ -26,10 +26,128 @@ export const operations: ConversionOperation[] = [
     ],
   },
   {
+    id: "pdf-to-powerpoint",
+    name: "PDF to PowerPoint",
+    category: "PDF",
+    accepts: ["pdf"],
+    outputs: ["pptx"],
+    options: [
+      {
+        key: "notes",
+        label: "Include speaker notes",
+        type: "boolean",
+        ariaLabel: "Include speaker notes in output",
+        defaultValue: false,
+      },
+    ],
+  },
+  {
+    id: "pdf-to-excel",
+    name: "PDF to Excel",
+    category: "PDF",
+    accepts: ["pdf"],
+    outputs: ["xlsx", "csv"],
+    options: [
+      {
+        key: "detectTables",
+        label: "Detect tables automatically",
+        type: "boolean",
+        ariaLabel: "Detect tables in PDF",
+        defaultValue: true,
+      },
+    ],
+  },
+  {
+    id: "pdf-compress",
+    name: "Compress PDF",
+    category: "PDF",
+    accepts: ["pdf"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "quality",
+        label: "Compression quality",
+        type: "number",
+        ariaLabel: "Choose PDF compression quality",
+        min: 1,
+        max: 100,
+        defaultValue: 70,
+      },
+    ],
+  },
+  {
+    id: "pdf-merge",
+    name: "Merge PDF",
+    category: "PDF",
+    accepts: ["pdf"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "bookmarks",
+        label: "Generate bookmarks",
+        type: "boolean",
+        ariaLabel: "Generate bookmarks in merged PDF",
+        defaultValue: true,
+      },
+    ],
+  },
+  {
+    id: "pdf-split",
+    name: "Split PDF",
+    category: "PDF",
+    accepts: ["pdf"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "pageRange",
+        label: "Page range mode",
+        type: "select",
+        ariaLabel: "Select PDF split mode",
+        choices: ["Every page", "Custom range"],
+        defaultValue: "Every page",
+      },
+    ],
+  },
+  {
+    id: "pdf-to-jpg",
+    name: "PDF to JPG",
+    category: "PDF",
+    accepts: ["pdf"],
+    outputs: ["jpg", "png"],
+    options: [
+      {
+        key: "dpi",
+        label: "Render DPI",
+        type: "number",
+        ariaLabel: "Set render resolution",
+        min: 72,
+        max: 300,
+        defaultValue: 150,
+      },
+    ],
+  },
+  {
+    id: "jpg-to-pdf",
+    name: "JPG to PDF",
+    category: "PDF",
+    accepts: ["jpg", "jpeg", "png", "webp"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "fit",
+        label: "Fit mode",
+        type: "select",
+        ariaLabel: "Select image fit mode",
+        choices: ["Fit", "Fill", "Stretch"],
+        defaultValue: "Fit",
+      },
+    ],
+  },
+  {
     id: "docx-to-pdf",
     name: "DOCX to PDF",
     category: "Office",
-    accepts: ["docx"],
+    accepts: ["doc", "docx", "odt"],
     outputs: ["pdf"],
     options: [
       {
@@ -50,10 +168,60 @@ export const operations: ConversionOperation[] = [
     ],
   },
   {
-    id: "png-to-jpg",
-    name: "PNG to JPG",
+    id: "ppt-to-pdf",
+    name: "PowerPoint to PDF",
+    category: "Office",
+    accepts: ["ppt", "pptx"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "handout",
+        label: "Handout layout",
+        type: "select",
+        ariaLabel: "Choose handout layout",
+        choices: ["1 slide", "2 slides", "4 slides"],
+        defaultValue: "1 slide",
+      },
+    ],
+  },
+  {
+    id: "excel-to-pdf",
+    name: "Excel to PDF",
+    category: "Office",
+    accepts: ["xls", "xlsx"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "orientation",
+        label: "Page orientation",
+        type: "select",
+        ariaLabel: "Choose output orientation",
+        choices: ["Portrait", "Landscape"],
+        defaultValue: "Portrait",
+      },
+    ],
+  },
+  {
+    id: "html-to-pdf",
+    name: "HTML to PDF",
+    category: "Office",
+    accepts: ["html", "htm"],
+    outputs: ["pdf"],
+    options: [
+      {
+        key: "printBackground",
+        label: "Print backgrounds",
+        type: "boolean",
+        ariaLabel: "Include CSS backgrounds",
+        defaultValue: true,
+      },
+    ],
+  },
+  {
+    id: "image-convert",
+    name: "Image Converter",
     category: "Image",
-    accepts: ["png", "webp"],
+    accepts: ["png", "jpg", "jpeg", "webp", "tiff"],
     outputs: ["jpg", "webp"],
     options: [
       {
@@ -71,6 +239,23 @@ export const operations: ConversionOperation[] = [
         type: "boolean",
         ariaLabel: "Remove metadata from image",
         defaultValue: true,
+      },
+    ],
+  },
+  {
+    id: "image-rotate",
+    name: "Rotate Image",
+    category: "Image",
+    accepts: ["png", "jpg", "jpeg", "webp"],
+    outputs: ["png", "jpg"],
+    options: [
+      {
+        key: "angle",
+        label: "Rotation angle",
+        type: "select",
+        ariaLabel: "Choose image rotation",
+        choices: ["90", "180", "270"],
+        defaultValue: "90",
       },
     ],
   },
@@ -117,10 +302,10 @@ export const operations: ConversionOperation[] = [
   },
   {
     id: "zip-to-7z",
-    name: "ZIP to 7Z",
+    name: "ZIP Converter",
     category: "Archive",
-    accepts: ["zip"],
-    outputs: ["7z", "tar"],
+    accepts: ["zip", "tar", "rar"],
+    outputs: ["zip", "tar", "rar"],
     options: [
       {
         key: "level",

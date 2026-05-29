@@ -1,2 +1,26 @@
 __pycache__/
 *.pyc
+
+
+# Ignore the .env file which may contain sensitive information
+.env
+
+# Ignore the .vscode directory which contains IDE settings
+.vscode/
+
+# Ignore the .idea directory which contains IDE settings
+.idea/
+
+# Ignore the .pytest_cache directory which contains pytest cache files
+.pytest_cache/
+
+# Ignore the .mypy_cache directory which contains mypy cache files
+.mypy_cache/
+
+# Ignore the .coverage file which contains coverage reports
+.coverage
+
+# Ignore node_modules directory which contains dependencies for JavaScript projects
+node_modules/
+frontend/node_modules/
+*/node_modules/

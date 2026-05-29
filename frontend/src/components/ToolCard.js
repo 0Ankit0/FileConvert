@@ -1,0 +1,5 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material";
+export function ToolCard({ operation, selected = false, onSelect }) {
+    return (_jsx(Card, { variant: selected ? "elevation" : "outlined", elevation: selected ? 6 : 0, sx: { borderColor: selected ? "primary.main" : "divider", height: "100%" }, children: _jsx(CardActionArea, { "aria-label": `Select ${operation.name} conversion tool`, onClick: () => onSelect(operation), sx: { height: "100%" }, children: _jsxs(CardContent, { children: [_jsxs(Stack, { direction: "row", spacing: 1, justifyContent: "space-between", alignItems: "center", mb: 1, children: [_jsx(Typography, { variant: "h6", component: "h3", children: operation.name }), _jsx(Chip, { size: "small", color: "primary", label: operation.category })] }), _jsxs(Typography, { variant: "body2", color: "text.secondary", children: ["Input: ", operation.accepts.map((ext) => `.${ext}`).join(", ")] }), _jsxs(Typography, { variant: "body2", color: "text.secondary", children: ["Output: ", operation.outputs.map((ext) => `.${ext}`).join(", ")] })] }) }) }));
+}

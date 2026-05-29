@@ -8,6 +8,7 @@ interface FormatPickerProps {
 
 export function FormatPicker({ options, value, onChange }: FormatPickerProps) {
   const handleChange = (event: SelectChangeEvent<string>) => onChange(event.target.value);
+  const normalizedValue = options.includes(value) ? value : options[0] ?? "";
 
   return (
     <FormControl fullWidth>
@@ -16,7 +17,7 @@ export function FormatPicker({ options, value, onChange }: FormatPickerProps) {
         labelId="output-format-label"
         aria-label="Select output format"
         label="Output format"
-        value={value}
+        value={normalizedValue}
         onChange={handleChange}
       >
         {options.map((option) => (

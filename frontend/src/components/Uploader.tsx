@@ -1,7 +1,7 @@
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
 import { Alert, Box, LinearProgress, Paper, Stack, Typography } from "@mui/material";
-import { DragEvent, KeyboardEvent, useRef, useState } from "react";
+import { DragEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { uploadFileInChunks } from "../api/chunkUpload";
 import { ConversionOperation } from "../types";
 
@@ -16,6 +16,10 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setError("");
+  }, [operation?.id]);
 
   const validateFile = async (file: File) => {
     if (!operation) {
@@ -49,12 +53,18 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
         tabIndex={0}
         aria-label="Upload source file by clicking or dragging"
         onClick={() => {
-          if (!isUploading) fileInputRef.current?.click();
+          if (!isUploading && fileInputRef.current) {
+            fileInputRef.current.value = "";
+            fileInputRef.current.click();
+          }
         }}
         onKeyDown={(event: KeyboardEvent) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            if (!isUploading) fileInputRef.current?.click();
+            if (!isUploading && fileInputRef.current) {
+              fileInputRef.current.value = "";
+              fileInputRef.current.click();
+            }
           }
         }}
         onDragOver={(event: DragEvent) => {
@@ -96,6 +106,7 @@ export function Uploader({ operation, onFileAccepted }: UploaderProps) {
         onChange={(event) => {
           const file = event.target.files?.item(0);
           if (file) validateFile(file);
+          event.currentTarget.value = "";
         }}
       />
 
