@@ -20,6 +20,10 @@ class OfficePlugin(ConverterPlugin):
         ("application/vnd.ms-powerpoint", "application/pdf"),
         ("application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf"),
         ("text/plain", "application/vnd.oasis.opendocument.text"),
+        ("application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+        ("application/pdf", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+        ("application/pdf", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+        ("text/html", "application/pdf"),
     }
 
     _operations = {"merge", "split"}

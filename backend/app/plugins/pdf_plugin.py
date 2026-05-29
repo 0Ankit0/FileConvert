@@ -14,12 +14,38 @@ class PDFPlugin(ConverterPlugin):
     _pairs = {
         ("application/pdf", "application/pdf"),
         ("application/pdf", "image/png"),
+        ("application/pdf", "image/jpeg"),
+        ("application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+        ("application/pdf", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+        ("application/pdf", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+        ("application/pdf", "text/csv"),
+        ("application/pdf", "text/plain"),
         ("image/png", "application/pdf"),
         ("image/jpeg", "application/pdf"),
+        ("image/webp", "application/pdf"),
+        ("application/msword", "application/pdf"),
+        ("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf"),
+        ("application/vnd.ms-powerpoint", "application/pdf"),
+        ("application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/pdf"),
+        ("application/vnd.ms-excel", "application/pdf"),
+        ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/pdf"),
+        ("text/html", "application/pdf"),
         ("text/plain", "application/pdf"),
     }
 
-    _operations = {"merge", "split", "compress", "rotate", "watermark", "ocr"}
+    _operations = {
+        "merge",
+        "split",
+        "compress",
+        "rotate",
+        "watermark",
+        "ocr",
+        "protect",
+        "unlock",
+        "page-numbers",
+        "organize",
+        "repair",
+    }
 
     def supports(self, input_mime: str, output_mime: str) -> bool:
         return (input_mime, output_mime) in self._pairs

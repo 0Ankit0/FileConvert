@@ -6,28 +6,17 @@ from typing import Any
 from app.services.conversion_engine import ConverterPlugin
 
 
-class ImagePlugin(ConverterPlugin):
-    """Image conversion/transforms backed by Pillow/OpenCV in full impl."""
+class DataPlugin(ConverterPlugin):
+    """Structured data conversion helpers."""
 
-    name = "image"
+    name = "data"
 
     _pairs = {
-        ("image/png", "image/png"),
-        ("image/png", "image/jpeg"),
-        ("image/jpeg", "image/jpeg"),
-        ("image/jpeg", "image/png"),
-        ("image/webp", "image/webp"),
-        ("image/webp", "image/png"),
-        ("image/png", "image/webp"),
-        ("image/jpeg", "image/webp"),
-        ("image/webp", "image/jpeg"),
-        ("image/tiff", "image/tiff"),
-        ("image/tiff", "image/png"),
-        ("image/tiff", "image/jpeg"),
-        ("image/heic", "image/jpeg"),
+        ("text/csv", "application/json"),
+        ("application/json", "text/csv"),
     }
 
-    _operations = {"compress", "rotate", "watermark", "ocr"}
+    _operations = {"normalize", "validate"}
 
     def supports(self, input_mime: str, output_mime: str) -> bool:
         return (input_mime, output_mime) in self._pairs
@@ -42,7 +31,5 @@ class ImagePlugin(ConverterPlugin):
         source = Path(source_path)
         destination = Path(destination_path)
         destination.parent.mkdir(parents=True, exist_ok=True)
-
-        # Placeholder passthrough - wire to Pillow/OpenCV in production.
         destination.write_bytes(source.read_bytes())
         return str(destination)

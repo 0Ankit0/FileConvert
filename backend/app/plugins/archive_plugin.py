@@ -16,10 +16,15 @@ class ArchivePlugin(ConverterPlugin):
     name = "archive"
 
     _pairs = {
+        ("application/zip", "application/zip"),
         ("application/zip", "application/x-tar"),
+        ("application/x-tar", "application/x-tar"),
         ("application/x-tar", "application/zip"),
+        ("application/x-rar-compressed", "application/x-rar-compressed"),
         ("application/x-rar-compressed", "application/zip"),
         ("application/zip", "application/x-rar-compressed"),
+        ("application/x-tar", "application/x-rar-compressed"),
+        ("application/x-rar-compressed", "application/x-tar"),
     }
 
     _operations = {"compress", "split"}

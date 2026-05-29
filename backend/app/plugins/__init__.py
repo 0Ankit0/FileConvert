@@ -1,4 +1,5 @@
 from app.plugins.archive_plugin import ArchivePlugin
+from app.plugins.data_plugin import DataPlugin
 from app.plugins.image_plugin import ImagePlugin
 from app.plugins.media_plugin import MediaPlugin
 from app.plugins.office_plugin import OfficePlugin
@@ -13,4 +14,5 @@ def build_registry() -> ConversionRegistry:
     registry.register(ImagePlugin())
     registry.register(MediaPlugin())
     registry.register(ArchivePlugin())
+    registry.register(DataPlugin())
     return registry

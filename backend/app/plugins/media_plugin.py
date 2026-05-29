@@ -18,6 +18,9 @@ class MediaPlugin(ConverterPlugin):
         ("audio/mpeg", "audio/wav"),
         ("audio/wav", "audio/mpeg"),
         ("video/mp4", "audio/mpeg"),
+        ("video/mp4", "audio/wav"),
+        ("video/quicktime", "audio/mpeg"),
+        ("video/quicktime", "audio/wav"),
     }
 
     _operations = {"compress", "split", "rotate"}
